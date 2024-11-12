@@ -1,0 +1,17 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}Topics{% endblock %}
+
+{% block content %}
+<h1>Topics in {{ subsection.name }}</h1>
+<ul>
+    {% for topic in topics %}
+        <li>
+            <h3><a href="{% url 'topic_detail' topic.id %}">{{ topic.title }}</a></h3>
+            <p>{{ topic.content|slice:":200" }}...</p>
+            <p>Created by {{ topic.author.username }} on {{ topic.created_at }}</p>
+        </li>
+    {% endfor %}
+</ul>
+ <a href="{% url 'create_topic' subsection.id %}" class="btn btn-primary">Create Topic</a>
+{% endblock %}

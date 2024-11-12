@@ -1,0 +1,33 @@
+{% extends 'forum/base.html' %} 
+
+{% block title %}Subsections{% endblock %}
+
+{% block content %}
+<h1>Subsections in {{ section.name }}</h1>
+<ul> 
+    {% for subsection in subsections %}
+        <li>
+            <h2><a href="{% url 'topic_list' subsection.id %}">{{ subsection.name }}</a></h2>
+            <p>{{ subsection.description }}</p>
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>Topic Counts by Subsection:</h3>
+<ul>
+    {% for subsection in subsections %}
+        <li>{{ subsection.name }}: {{ subsection.num_topics }} topic{% if subsection.num_topics != 1 %}s{% endif %}</li>
+    {% empty %}
+        <li>No topics found for this subsection.</li>
+    {% endfor %}
+</ul>
+{% if is_moderator_or_admin %}
+<a href="{% url 'create_subsection' %}"> Create subsection </a>
+{% endif %}
+<h3>Debugging Output:</h3>
+<pre>
+{% for subsection in subsections %}
+    {{ subsection.name }}: {{ subsection.num_topics }} (Count in DB: {{ subsection.topics.count }})
+{% endfor %}
+</pre>
+{% endblock %}

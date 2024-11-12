@@ -1,0 +1,55 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}User: {{ user_profile.user.username }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'start_conversation' user_profile.user.id %}">Message</a>
+<h1>User: {{ user_profile.user.username }}</h1>
+<p>Email: {{ user_profile.user.email }}</p>
+<p>Karma: {{ user_profile.karma }}</p>
+
+{% if user_profile.telegram_nickname %}
+<p>Telegram: <a href="https://t.me/{{user_profile.telegram_nickname}}" target="_blank"> {{user_profile.telegram_nickname}} </a></p>
+{% endif %}
+
+{% if user_profile.personal_site %}
+<p>Site: <a href="{{user_profile.personal_site}}" target="_blank"> {{user_profile.personal_site}} </a></p>
+{% endif %}
+
+{% if user_profile.user == request.user or is_moderator_or_admin %}
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="action" value="increase">Increase karma</button>
+    <button type="submit" name="action" value="decrease">Decrease karma</button>
+</form>
+{% endif %}
+<h2> Bans </h2>
+<ul>
+    {% for ban in user_profile.user.bans.all %}
+        <li>
+            <strong>{{ ban.moderator.username }}</strong> banned user on {{ ban.start_date }} for {{ ban.reason }}. 
+            {% if ban.is_active %}
+                Active until {{ ban.end_date }}
+            {% else %}
+                This ban has ended.
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+<h2>Warnings:</h2>
+{% if warnings %}
+    <ul>
+    {% for warning in warnings %}
+        <li><strong>{{ warning.moderator.username }}</strong> warned you: {{ warning.reason }} (on {{ warning.created_at }})</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No warnings yet.</p>
+{% endif %}
+
+{% if is_moderator_or_admin %}
+    <a href="{% url 'warn_user' user_profile.user.id %}" class="btn btn-warning">Issue Warning</a>
+    <a href="{% url 'ban_user' user_profile.user.id %}" class="btn btn-danger">Ban User</a>
+{% endif %}
+{% endblock %}
+

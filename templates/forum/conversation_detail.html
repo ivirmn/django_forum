@@ -1,0 +1,53 @@
+{% extends 'forum/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .message {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .my-message {
+            background-color: #d0eaff; /* Светло-синий фон для ваших сообщений */
+            text-align: right;
+        }
+        .other-message {
+            background-color: #ffffff; /* Белый фон для входящих сообщений */
+            text-align: left;
+        }
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+<h1>Conversation with {{ conversation.participants.all|join:", " }}</h1>
+
+<div id="messages">
+    {% for message in messages %}
+        <div class="message {% if message.author == request.user %}my-message{% else %}other-message{% endif %}">
+            <strong>{{ message.author.username }}:</strong>
+            <p>{{ message.content }}</p>
+            <small>Posted at: {{ message.created_at }}</small>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Форма отправки нового сообщения -->
+<form method="post">
+    {% csrf_token %}
+    <textarea name="message" rows="3" placeholder="Type your message here..." required></textarea>
+    <button type="submit">Send</button>
+</form>
+{% endblock %}
+</body>
+</html>

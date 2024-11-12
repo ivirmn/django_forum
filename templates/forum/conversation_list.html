@@ -1,0 +1,16 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}Your Conversations{% endblock %}
+
+{% block content %}
+<h1>Your Conversations</h1>
+<ul>
+    {% for conversation in conversations %}
+        <li>
+            <a href="{% url 'conversation_detail' conversation.id %}">
+                Conversation with {% for user in conversation.participants.all %}{{ user.username }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

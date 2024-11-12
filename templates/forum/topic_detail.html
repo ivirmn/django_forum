@@ -1,0 +1,40 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}{{ topic.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ topic.title }}</h1>
+    <p>{{ topic.content }}</p>
+    <p>By {{ topic.author.username }} on {{ topic.created_at }}</p>
+
+    {% if topic.edited_at %}
+        <p><small>Edited at {{ topic.edited_at }}</small></p>
+    {% endif %}
+
+    <h2>Posts:</h2>
+   <ul>
+    {% for post in posts %}
+        <li>
+            <a href="{% url 'user_profile' post.author.id %}">{{ post.author.username }}</a>: {{ post.content }} <br>
+            <small>Posted at {{ post.created_at }}</small>
+            {% if post.parent_post %}
+                <p>Reply to: <a href="{{ post.parent_post.get_absolute_url }}">{{ post.parent_post.author.username }}</a></p>
+            {% endif %}
+            <a href="{% url 'reply_to_post' topic.id post.id %}">Reply</a>  <!-- Кнопка ответа на пост -->
+        </li>
+    {% endfor %}
+</ul>
+
+{% if parent_post %}
+    <h2>Replying to {{ parent_post.author.username }}'s post</h2>
+    <p>{{ parent_post.content }}</p>
+{% endif %}
+
+<h2>Post a reply:</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ post_form.as_p }}
+    <button type="submit">Post</button>
+</form>
+{% endblock %}
+

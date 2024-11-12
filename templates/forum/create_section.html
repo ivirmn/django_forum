@@ -1,0 +1,12 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}Создать раздел{% endblock %}
+
+{% block content %}
+<h1>Создать раздел</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Создать</button>
+</form>
+{% endblock %}

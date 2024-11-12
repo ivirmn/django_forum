@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Computer Science Forum{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'forum/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1><a href="{% url 'section_list' %}">Computer Science Forum</a></h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'section_list' %}">Home</a></li>
+		<li><a href="{% url 'forum_stats' %}">Stats</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'conversation_list' %}">QMS</a></li>
+                    <li><a href="{% url 'user_profile' user.id %}">Profile</a></li>
+                    <li><form method="POST" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit">Logout</button>
+</form></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Forum</p>
+    </footer>
+</body>
+</html>

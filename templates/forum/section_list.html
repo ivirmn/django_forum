@@ -1,0 +1,22 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}Forum Sections{% endblock %}
+
+{% block content %}
+<h1>Forum Sections</h1>
+
+{% if user.is_superuser %}
+    <!-- Кнопки доступны только администратору -->
+    <a href="{% url 'create_section' %}" class="btn btn-primary">Create a section</a>
+    <a href="{% url 'create_subsection' %}" class="btn btn-primary">Create a subsection</a>
+{% endif %}
+
+<ul>
+    {% for section in sections %}
+        <li>
+            <h2><a href="{% url 'subsection_list' section.id %}">{{ section.name }}</a></h2>
+            <p>{{ section.description }}</p>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

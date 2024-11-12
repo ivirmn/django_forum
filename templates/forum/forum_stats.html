@@ -1,0 +1,29 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}Forum Statistics{% endblock %}
+
+{% block content %}
+<h1>Forum Statistics</h1>
+
+<h2>General Statistics</h2>
+<ul>
+    <li>Total Sections: {{ section_count }}</li>
+    <li>Total Subsections: {{ subsection_count }}</li>
+    <li>Total Topics: {{ topic_count }}</li>
+    <li>Total Posts: {{ post_count }}</li>
+</ul>
+
+<h2>Topics by Section</h2>
+<ul>
+    {% for section in topics_by_section %}
+        <li>{{ section.name }}: {{ section.num_topics }} topics</li>
+    {% endfor %}
+</ul>
+
+<h2>Topics by Subsection</h2>
+<ul>
+    {% for subsection in topics_by_subsection %}
+        <li>{{ subsection.name }}: {{ subsection.num_topics }} topics</li>
+    {% endfor %}
+</ul>
+{% endblock %}
